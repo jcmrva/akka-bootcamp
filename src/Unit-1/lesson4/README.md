@@ -168,7 +168,7 @@ There are two built-in supervision strategies:
 1. One-For-One Strategy (default)
 2. All-For-One Strategy
 
- The basic difference between these is how widespread the effects of the error-resolution directive will be.
+The basic difference between these is how widespread the effects of the error-resolution directive will be.
 
 **One-For-One** says that the directive issued by the parent only applies to the failing child actor. It has no effect on the siblings of the failing child. This is the default strategy if you don't specify one. (You can also define your own custom supervision strategy.)
 
@@ -234,7 +234,7 @@ Recall that we could have many clones of this exact structure working in paralle
 > You may also hear people use the term "error kernel," which refers to how much of the system is affected by the failure. You may also hear "error kernel pattern," which is just fancy shorthand for the approach I just explained where we push dangerous behavior to child actors to isolate/protect the parent.
 
 ## Exercise
-To start off, we need to do some upgrading of our system. We are going to add in the components which will enable our actor system to actually monitor a file for changes. We have most of the classes we need, but there are a few pieces of utility code that we need to add: the `TailCoordinatorActor`, `TailActor`, and the `FileObserver`. 
+To start off, we need to do some upgrading of our system. We are going to add in the components which will enable our actor system to actually monitor a file for changes. We have most of the classes we need, but there are a few pieces of utility code that we need to add: the `TailCoordinatorActor`, `TailActor`, and the `FileObserver`.
 
 The goal of this exercise is to show you how to make a parent/child actor relationship.
 
@@ -258,7 +258,7 @@ namespace WinTail
     public class TailCoordinatorActor : UntypedActor
     {
         #region Message types
-        
+
         /// <summary>
         /// Start tailing the file at user-specified path.
         /// </summary>
@@ -287,7 +287,7 @@ namespace WinTail
 
             public string FilePath { get; private set; }
         }
-        
+
         #endregion
 
         protected override void OnReceive(object message)
@@ -326,7 +326,7 @@ namespace WinTail
         #region Message types
 
         /// <summary>
-        /// Signal that the file has changed, and we need to 
+        /// Signal that the file has changed, and we need to
         /// read the next line of the file.
         /// </summary>
         public class FileWrite
@@ -441,11 +441,11 @@ protected override void OnReceive(object message)
     if (message is StartTail)
     {
         var msg = message as StartTail;
-		// here we are creating our first parent/child relationship!
-		// the TailActor instance created here is a child
-		// of this instance of TailCoordinatorActor
+        // here we are creating our first parent/child relationship!
+        // the TailActor instance created here is a child
+        // of this instance of TailCoordinatorActor
         Context.ActorOf(Props.Create(
-          () => new TailActor(msg.ReporterActor, msg.FilePath)));
+            () => new TailActor(msg.ReporterActor, msg.FilePath)));
     }
 }
 ```
@@ -487,8 +487,8 @@ namespace WinTail
             if (string.IsNullOrEmpty(msg))
             {
                 // signal that the user needs to supply an input
-                _consoleWriterActor.Tell(new Messages.NullInputError("Input was blank.
-                Please try again.\n"));
+                _consoleWriterActor.Tell(new Messages.NullInputError(@"Input was blank.
+                    Please try again.\n"));
 
                 // tell sender to continue doing its thing (whatever that may be,
                 // this actor doesn't care)
@@ -545,7 +545,7 @@ IActorRef tailCoordinatorActor = MyActorSystem.ActorOf(tailCoordinatorProps,
 
 // pass tailCoordinatorActor to fileValidatorActorProps (just adding one extra arg)
 Props fileValidatorActorProps = Props.Create(() =>
-new FileValidatorActor(consoleWriterActor, tailCoordinatorActor));
+    new FileValidatorActor(consoleWriterActor, tailCoordinatorActor));
 IActorRef validationActor = MyActorSystem.ActorOf(fileValidatorActorProps,
     "validationActor");
 ```

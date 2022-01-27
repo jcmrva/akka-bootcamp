@@ -26,7 +26,7 @@ class MyActor : UntypedActor
 {
     protected override void OnReceive(object message)
     {
-         if (message is Messages.InputError)
+        if (message is Messages.InputError)
         {
             var msg = message as Messages.InputError;
             Console.ForegroundColor = ConsoleColor.Red;
@@ -231,16 +231,16 @@ private void GetAndValidateInput()
         var valid = IsValid(message);
         if (valid)
         {
-            _consoleWriterActor.Tell(new Messages.InputSuccess("Thank you!
-             Message was valid."));
+            _consoleWriterActor.Tell(new Messages.InputSuccess(@"Thank you!
+                Message was valid."));
 
             // continue reading messages from console
             Self.Tell(new Messages.ContinueProcessing());
         }
         else
         {
-        	Self.Tell(new Messages.ValidationError("Invalid: input had
-            odd number of characters."));
+            Self.Tell(new Messages.ValidationError(@"Invalid: input had
+                odd number of characters."));
         }
     }
 }
