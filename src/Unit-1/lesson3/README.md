@@ -60,7 +60,7 @@ You may have noticed that we passed names into the `ActorSystem` when we were cr
 ```csharp
 // last arg to the call to ActorOf() is a name
 IActorRef myFirstActor = MyActorSystem.ActorOf(Props.Create(() => new MyActorClass()),
- "myFirstActor")
+    "myFirstActor")
 ```
 
 This name is not required. It is perfectly valid to create an actor without a name, like so:
@@ -73,7 +73,7 @@ That said, **the best practice is to name your actors**. Why? Because the name o
 
 #### What's `Context` Used for?
 
-All actors exist within a context, which you can acccess by the `Context` property built into every actor. 
+All actors exist within a context, which you can acccess by the `Context` property built into every actor.
 
 The `Context` holds metadata about the current state of the actor, such as the `Sender` of the current message and things like current actors `Parent` or `Children`.
 
@@ -102,25 +102,25 @@ Before we tell you how to make `Props`, let me tell you what NOT to do.
 There are 3 ways to properly create `Props`, and they all involve a call to `Props.Create()`.
 
 1. **The `typeof` syntax:**
-  ```csharp
-  Props props1 = Props.Create(typeof(MyActor));
-  ```
+```csharp
+Props props1 = Props.Create(typeof(MyActor));
+```
 
-  While it looks simple, **we recommend that you do not use this approach.** Why? *Because it has no type safety and can easily introduce bugs where everything compiles fine, and then blows up at runtime*.
+While it looks simple, **we recommend that you do not use this approach.** Why? *Because it has no type safety and can easily introduce bugs where everything compiles fine, and then blows up at runtime*.
 
 2. **The lambda syntax**:
-  ```csharp
-  Props props2 = Props.Create(() => new MyActor(..), "...");
-  ```
+```csharp
+Props props2 = Props.Create(() => new MyActor(..), "...");
+```
 
-  This is a mighty fine syntax, and our favorite. You can pass in the arguments required by the constructor of your actor class inline, along with a name.
+This is a mighty fine syntax, and our favorite. You can pass in the arguments required by the constructor of your actor class inline, along with a name.
 
 3. **The generic syntax**:
-  ```csharp
-  Props props3 = Props.Create<MyActor>();
-  ```
+```csharp
+Props props3 = Props.Create<MyActor>();
+```
 
-  Another fine syntax that we whole-heartedly recommend.
+Another fine syntax that we whole-heartedly recommend.
 
 #### How do I use `Props`?
 You actually already know this, and have done it. You pass the `Props`—the actor recipe—to the call to `Context.ActorOf()` and the underlying `ActorSystem` reads the recipe, et voila! Whips you up a fresh new actor.
@@ -161,7 +161,7 @@ namespace WinTail
             {
                 // signal that the user needs to supply an input
                 _consoleWriterActor.Tell(
-                  new Messages.NullInputError("No input received."));
+                    new Messages.NullInputError("No input received."));
             }
             else
             {
@@ -169,14 +169,14 @@ namespace WinTail
                 if (valid)
                 {
                     // send success to console writer
-                    _consoleWriterActor.Tell(new Messages.InputSuccess("Thank you!
-                     Message was valid."));
+                    _consoleWriterActor.Tell(new Messages.InputSuccess(@"Thank you!
+                        Message was valid."));
                 }
                 else
                 {
                     // signal that input was bad
-                    _consoleWriterActor.Tell(new Messages.ValidationError("Invalid:
-                     input had odd number of characters."));
+                    _consoleWriterActor.Tell(new Messages.ValidationError(@"Invalid:
+                        input had odd number of characters."));
                 }
             }
 
@@ -287,7 +287,7 @@ Add this to `Main()` on the line after `validationActorProps`:
 
 ```csharp
 // Program.cs
-IActorRef validationActor = MyActorSystem.ActorOf(validationActorProps, 
+IActorRef validationActor = MyActorSystem.ActorOf(validationActorProps,
     "validationActor");
 ```
 
@@ -304,7 +304,7 @@ IActorRef consoleReaderActor = MyActorSystem.ActorOf(consoleReaderProps,
 You may not have noticed it, but we actually are using a special `IActorRef` now: `Sender`. Go look for this in `ValidationActor.cs`:
 
 ```csharp
-// tell sender to continue doing its thing 
+// tell sender to continue doing its thing
 // (whatever that may be, this actor doesn't care)
 Sender.Tell(new Messages.ContinueProcessing());
 ```
